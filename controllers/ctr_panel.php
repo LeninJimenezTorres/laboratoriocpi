@@ -1,0 +1,16 @@
+<?php
+require_once "Models/modelo_TypesUser.php";
+class ControladorTypePanel{
+    public function ctrAbrirPanelAdmin(){
+        ModelUserTypes::mdlAdmCall();
+        exit();
+        die();
+    }
+    public function ctrAbrirPanelUser(){
+        ModelUserTypes::mdlUserCall();
+        exit();
+        die();
+    }
+}
+?> 
+
