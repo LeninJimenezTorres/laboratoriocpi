@@ -24,10 +24,9 @@ else{
         <?php echo $_GET['name'];?>   
         </h5> 
     </div>
-    <table class="table table-dark table-hover">
+    <table class="table table-dark table-hover text-center">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nombre del paciente</th>
                 <th>Codigo de Informe</th>
                 <th>Fecha recepción de muestra</th>
@@ -40,22 +39,21 @@ else{
             <?php if(!empty($resultados)): ?>
                 <?php foreach ($resultados as $key => $value) : ?>
                     <tr>
-                        <td><?php echo $value["idr"] ?></td>
                         <td><?php echo $value["patient"] ?></td>
                         <td><?php echo $value["code"] ?></td>
                         <td><?php echo $value["reception"] ?></td>
                         <td><?php echo $value["deliver"] ?></td>
                         <td>
                             <div class="row justify-content-center align-items-center form-group">
-                                <button type="submit" name="download" value="<?php echo $value["code"] ?>" class="btn btn-primary">Descargar</button>        
+                                <button type="submit" name="download" value="<?php echo $value["code"] ?>" class="btn btn-primary"><i class="fas fa-file-pdf"></i></button>        
                             </div>
                         </td>
                         <td>
                             <div class="row justify-content-center align-items-center form-group">
-                                <a href="panel_admin.php?modulos=update_results_admin&code=<?php echo $value["code"];?>" type="submit" name="update_result" class="btn btn-warning">Editar</a>
+                                <a href="panel_admin.php?modulos=update_results_admin&code=<?php echo $value["code"];?>" type="submit" name="update_result" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                             </div>
                             <div class="row justify-content-center align-items-center form-group">
-                                <button type="submit" name="eliminar" value="<?php echo $value["code"] ?>" class="btn btn-danger">Eliminar</button>
+                                <button type="submit" name="eliminar" value="<?php echo $value["code"] ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                             </div>
                         </td>
                     </tr>

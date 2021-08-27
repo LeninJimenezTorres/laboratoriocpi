@@ -17,7 +17,7 @@ $usuarios = ControladorFormulario::ctrSeleccionarRegistros();
     <div class="container-fluid p-2 lola bg-light"> <!--bg-light-->
         <h4 class="h3-title text-center"><br><br>Lista de usuarios registrados</h4>
         <p><br>Click en 'Ver' para desplegar el historial de exámenes por médico:</p>
-        <table class="table table-dark table-hover" id='lola'>
+        <table class="table table-dark table-hover text-center">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -28,7 +28,7 @@ $usuarios = ControladorFormulario::ctrSeleccionarRegistros();
                     <th>Email</th>
                     <th>Telf</th>
                     <th>Archivo</th>
-                    <th>Acciones</th>
+                    <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,16 +45,16 @@ $usuarios = ControladorFormulario::ctrSeleccionarRegistros();
                             <td><?php echo $value["phone"] ?></td>
                             <td>
                                 <div class="row justify-content-center align-items-center form-group">
-                                    <a href="panel_admin.php?modulos=historial_admin&name=<?php echo $value["name"];?>" type="submit" id="ver" name="ver" class="btn btn-primary">Ver</a>
+                                    <a href="panel_admin.php?modulos=historial_admin&name=<?php echo $value["name"];?>" type="submit" id="ver" name="ver" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                                 </div>
                             </td>
                             <td>
                                 <div class="row justify-content-center align-items-center form-group">
-                                    <a href="panel_admin.php?modulos=update_admin&id=<?php echo $value["id"];?>" type="submit" name="editar" class="btn btn-warning">Editar</a>
+                                    <a href="panel_admin.php?modulos=update_admin&id=<?php echo $value["id"];?>" type="submit" name="editar" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                                 </div>
                                 <div class="row justify-content-center align-items-center form-group">
                                     <form action="" method="post">
-                                        <button type="submit" class="btn btn-danger" name="eliminar" value="<?php echo $value["id"] ?>">Eliminar</button>
+                                        <button type="submit" class="btn btn-danger" name="eliminar" value="<?php echo $value["id"] ?>"><i class="fas fa-trash-alt"></i></button>
                                     </form>
                                 </div>
                             </td>

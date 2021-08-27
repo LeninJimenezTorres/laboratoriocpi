@@ -2,7 +2,7 @@
     <div class="container-fluid p-2 lola"> <!--bg-light-->
         <h4 class="h3-title text-center"><br><br>Resultados</h4>
         <!-- <p><br>Click en 'Ver' para desplegar el historial de exámenes por médico:</p> -->
-        <table class="table table-dark table-hover" id='resultadosTabla'>
+        <table class="table table-dark table-hover text-center" id='resultadosTabla'>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -29,16 +29,16 @@
                         <td><?php echo $consulta["phone"] ?></td>
                         <td>
                             <div class="row justify-content-center align-items-center form-group">
-                                <a href="panel_admin.php?modulos=historial_admin&name=<?php echo $consulta["name"];?>" type="submit" id="ver" name="ver" class="btn btn-primary">Ver</a>
+                                <a href="panel_admin.php?modulos=historial_admin&name=<?php echo $consulta["name"];?>" type="submit" id="ver" name="ver" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                             </div>
                         </td>
                         <td>
                             <div class="row justify-content-center align-items-center form-group">
-                                <a href="panel_admin.php?modulos=update_admin&id=<?php echo $consulta["id"];?>" type="submit" name="editar" class="btn btn-warning">Editar</a>
+                                <a href="panel_admin.php?modulos=update_admin&id=<?php echo $consulta["id"];?>" type="submit" name="editar" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                             </div>
                             <div class="row justify-content-center align-items-center form-group">
                                 <form action="" method="post">
-                                    <button type="submit" class="btn btn-danger" name="eliminar" value="<?php echo $cons["id"] ?>">Eliminar</button>
+                                    <button type="submit" class="btn btn-danger" name="eliminar" value="<?php echo $cons["id"] ?>"><i class="fas fa-trash-alt"></i></button>
                                 </form>
                             </div>
                         </td>

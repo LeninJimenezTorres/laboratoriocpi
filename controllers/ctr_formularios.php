@@ -1,14 +1,63 @@
 <?php 
 
 class ControladorFormulario{
-    //BUSQUEDA POR FILTRO
+    //CONSULTO SI EXISTE UN DATO 
+    static public function ctrDatoExistente($tabla,$column,$valor){
+        //echo '<br>Ingreso al controlador  la variable: '.$valor.'<br>';
+        $respuesta=ModeloFormularios::mdlUserDataSpecific($tabla,$column,$valor);
+        //echo 'El resultado del modelo es: ';
+        //print_r($respuesta);
+        //echo '<br><br>';
+        return $respuesta;
+    }
+
+    //BUSQUEDA POR FILTRO USER
+    static public function ctrBusquedaUserReception($TipoFecha){
+        if (isset($_POST['search'])){
+            //PRIMERO VALIDO LA ENTRADA
+            if (preg_match('/^[0123456789\\/]/',$_POST["fecha"]) && !empty($_POST['fecha']))
+                { 
+                    
+                    //REALIZO LA CONSULTA
+                    $consulta = ModeloFormularios::mdlResultQueryDouble('resultados',$TipoFecha, $_POST['fecha'], 'dr', $_SESSION["validarSesionUserName"]); 
+                    if (!empty($consulta))
+                    {   
+                        echo '<div class="alert-success text-center">Búsqueda exitosa<br></div>'; 
+                        include '../views/modulos/show_query_user.php';
+                    }
+                    else{        
+                        echo '<div class="alert-warning text-center">No existen datos en esa fecha<br></div>'; 
+                    }
+                }
+            else {
+                echo '<script>if(window.history.replaceState){
+                    window.history.replaceState( null, null, window.location.href);
+                }</script>';
+                echo '<div class="alert-danger text-center">Error de ingreso, se ha detectado caracteres no permitidos <br></div>'; 
+            }
+        }
+    }
+
+    //BUSQUEDA POR FILTRO USER
+    static public function ctrBusquedaUserPatient(){
+        if (isset($_POST['search'])){
+            $consulta = ModeloFormularios::mdlResultQueryDouble('resultados','patient', $_POST['buscar'], 'dr', $_SESSION["validarSesionUserName"]); 
+            if (!empty($consulta))
+            {   
+                include '../views/modulos/show_query_user.php';
+            }
+            else{        
+                echo '<div class="alert-warning text-center">El usuario no existe en pacientes<br></div>'; 
+            }
+        }
+    }
+
+    //BUSQUEDA POR FILTRO ADMIN
     static public function ctrBusquedaFiltro(){
         if(isset($_GET['type'])){
-            echo 'El tipo es: ';
-            print_r($_GET['type']);
+            //echo 'El tipo es: ';print_r($_GET['type']);
             if (!empty($_POST['valor'])){
-                echo '<br>El dato a buscar es: ';
-                print_r($_POST['valor']);
+                //echo '<br>El dato a buscar es: ';print_r($_POST['valor']);
                 
                 if ($_POST['buscar']){
                     if($_GET['type']=='patient'){
@@ -18,8 +67,7 @@ class ControladorFormulario{
                             if (!empty($consulta))
                             {   
                                 //echo '<br>El medico es: '; print_r($do['dr']);
-                                echo '<br>Consulta en base de datos de pacientes: <br>';
-                                print_r($consulta);
+                                //echo '<br>Consulta en base de datos de pacientes: <br>';print_r($consulta);
                                 include '../views/modulos/show_query_admin.php';
 
                             }
@@ -33,8 +81,7 @@ class ControladorFormulario{
                             $consulta = ModeloFormularios::mdlResultQuery('resultados','dr', $_POST['valor']); 
                             if (!empty($consulta))
                             {
-                                echo 'Consulta en base de datos de doctores: <br>';
-                                print_r($consulta);
+                                //echo 'Consulta en base de datos de doctores: <br>';print_r($consulta);
                                 include '../views/modulos/show_query_admin.php';
                             }
                             else{        
@@ -46,9 +93,8 @@ class ControladorFormulario{
             }            
         }
         else{
-            echo 'No se conoce el type';
+            echo '<div class="alert text-center">Seleccione el filtro<br></div>'; 
         }
-
     }
 
     //BUSQUEDA DE USUARIO INICIO
@@ -63,10 +109,27 @@ class ControladorFormulario{
                 else{        
                     echo '<div class="alert-warning text-center">El usuario no existe<br></div>'; 
                 }
-            }
-            
+            }   
         }
     }
+
+        //BUSQUEDA DE USUARIO INICIO
+        static public function ctrlBusquedaResultPanel($doc){
+            if (isset($_POST['search'])){
+                if (!empty($_POST['buscar'])){
+                    $consulta = ModeloFormularios::mdlResultQueryDouble('resultados','patient', $_POST['buscar'], 'dr', $doc); 
+                    //print_r($consulta);
+                    if (!empty($consulta))
+                    {
+                        include '../Views/modulos/buscarinicio_user.php';
+                    }
+                    else{        
+                        echo '<div class="alert-warning text-center">El usuario no existe<br></div>'; 
+                    }
+                }   
+            }
+        }
+    
 
     //ESTE CTRL REGISTRA USUARIOS VALIDANDO LOS FORMULARIOS
     static public function ctrRegistroUsuarioValidado(){
@@ -276,31 +339,9 @@ class ControladorFormulario{
     }
 
     //ESTE CTRL PERMITE LA DESCARGA DEL DOCUMENTO
-    static public function ctrDownloadQuery(){
-        if (isset($_POST['ver'])){
-            echo 'Se ha llamado correctamente al ctrl';
-            // if (isset($_POST['code']))
-            // {
-            //     $filename = ModeloFormularios::mdlSpecificValueQuery('resultados','result','code',$_POST['code']);
-            //     //print_r ($filename['result']); echo '<br><br>';
-            //     $user= ModeloFormularios::mdlSpecificValueQuery('resultados','dr','code',$_POST['code']);
-            //     //print_r($user['dr']); echo '<br><br>';
-            //     $location = 'http://localhost/cpi_login/views/results/'.$user["dr"].'/';
-            //     //$extension = pathinfo($location.$filename, PATHINFO_EXTENSION);
-            //     $dir=$location.$filename['result'].'.pdf';
-            //     //echo '<br><br>'.$dir;
-            //     //fopen($dir, 'r');
-            //     echo '<script> window.open("'.$dir.'", "Diseño Web") </script>';    
-            // }
-        }      
-        else
-        {
-            return null;
-        }                  
-    }
-    //ESTE CTRL PERMITE LA DESCARGA DEL DOCUMENTO
     static public function ctrDownload(){
         if (isset($_POST["download"])){
+            //echo 'El valor enviado de download es: ';print_r($_POST['download']);echo'<br><br>';
             $filename = ModeloFormularios::mdlSpecificValueQuery('resultados','result','code',$_POST['download']);
             //print_r ($filename['result']); echo '<br><br>';
             $user= ModeloFormularios::mdlSpecificValueQuery('resultados','dr','code',$_POST['download']);
@@ -376,12 +417,17 @@ class ControladorFormulario{
         return $respuesta; 
     }
 
+    //LOS DATOS DE LA DB, Y ALMACENA LOS RESULTADOS SIN QUE EL MODELO QUE CONSULTA DIRECTAMENTE LOS DATOS SE EXPONGA DE NINGUNA MANERA.
+    static public function ctrConsultaDatosEspecificosUser($tabla,$column,$value){
+        $respuesta = ModeloFormularios::mdlResultQuery($tabla,$column,$value);
+        return $respuesta; 
+    }
+
     //ESTE CTRL CONSULTA CUALQUIER DATO POR MEDIO DEL MDL ModeloFormularioMain
     static public function ctrConsultaDatos($tabla, $column, $valor)
     {
         require_once '../Models/modelo_formulario.php';
         $respuesta = ModeloFormularioMain::mdlConsultaEspecfDB($tabla, $column, $valor);
-        
         return $respuesta;    
     }
 

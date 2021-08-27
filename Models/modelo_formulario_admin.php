@@ -17,6 +17,7 @@ class ModeloFormularios{
         //echo $valor;
         //echo '<pre>'; print_r($datos); echo '</pre>';   
         if (strlen($valor)>0){
+
             $stmt = ConexionRegistrosDB::conectar() -> prepare("SELECT $column FROM $tabla WHERE $column =:$column");
             $stmt->bindParam(":".$column,$valor, PDO::PARAM_STR);
             $stmt->execute();
@@ -96,6 +97,17 @@ class ModeloFormularios{
         $stmt -> die;
         $stmt = null; 
     }
+
+        //ESTA CLASE MODELO DEVUELVE DE TODOS LOS RESULTADOS/INFORMES DEL USUARIO EN ESPECIFICO 
+        static public function mdlResultQueryDouble($tabla, $column1 ,$value1, $column2, $value2){
+            $stmt = ConexionRegistrosDB::conectar()->prepare("SELECT * FROM $tabla WHERE $column1=:$column1 AND $column2=:$column2");
+            $stmt->bindParam(":".$column1,$value1, PDO::PARAM_STR);
+            $stmt->bindParam(":".$column2,$value2, PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchall(); 
+            $stmt -> die;
+            $stmt = null; 
+        }
     
     //ESTA CLASE MODELO INVOCA AL MODELO DE CONEXION DE DB Y REALIZA UNA CONSULTA DE TODOS LOS DATOS
     static public function mdlSeleccionarRegistros($tabla){

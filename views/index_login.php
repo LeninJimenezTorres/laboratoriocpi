@@ -1,6 +1,13 @@
 <?php
-session_start();
+session_start();                                
 ?>
+
+<script>
+    function contacte(){
+        alert("Contacte al administrador");
+    }
+</script>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -53,7 +60,7 @@ session_start();
                         <form class="formulario-micro"  method="post"> 
                             <!-- action="./Controllers/validar.php" -->
                             <div class="usuario-out input-group-prepend">
-                                <p>Doctor</p>
+                                <p>Usuario</p>
                                 <label for="usuario">
                                     <input id="usuario" class="usuario form-control" type="text" name="nombre">
                                 </label>
@@ -68,14 +75,13 @@ session_start();
                                 <button type="submit" id="boton-enviar" class="form-control" name="ingreso">Ingresar</button>
                             </div>
                             <div class="olvido">
-                                <a href="#">¿Olvidó su contraseña?</a>
+                                <a href="#" onclick="contacte()">¿Olvidó su contraseña?</a>
                             </div>
                             <div class="registrarse">
-                                <a href="#">Registrarse</a>
+                                <a href="#" onclick="contacte()">Registrarse</a>
                             </div>   
                             
                             <?php
-                                require_once "controllers/ctr_login.php";
                                 $ingreso =  new ControladorLogin();
                                 $ingreso -> ctrLogin();
                             ?>
@@ -97,3 +103,4 @@ session_start();
 </body>
 
 </html>
+<?php

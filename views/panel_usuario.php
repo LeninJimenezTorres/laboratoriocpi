@@ -1,6 +1,28 @@
 <?php
     require_once "../controllers/ctr_formularios.php";
     require_once "../Models/modelo_formulario_admin.php";
+    session_start();
+    // if(isset($_SESSION)){
+    //     echo '<script>alert('.print_r($_SESSION).')</script>';
+    // }
+    if(isset($_SESSION["validarSesionUser"])){
+        //CONSULTO SI EL ID ESTA EN LA BASE DE DATOS DE LOS DR
+        //echo 'Variable sesion ID en panel: '.$_SESSION["validarSesionUser"].'<br><br>';
+        //echo 'Variable sesion Name en panel: '.$_SESSION["validarSesionUserName"].'<br><br>';
+        
+        $existe = ControladorFormulario::ctrDatoExistente('usuarios','id',$_SESSION["validarSesionUser"]);//me devuelve el id
+        //echo 'Existe el usuario: ';
+        //print_r($existe);
+        if($_SESSION["validarSesionUser"]!=$existe['id'] || $_SESSION['validarSesionUserName']!=$existe['name']){
+            echo '<script>window.location = "http://localhost/cpi_login/index_online.php"</script>';
+            return;
+        }
+    }
+    else{
+        echo '<script>window.location = "http://localhost/cpi_login/index_online.php"</script>';
+        return;
+    }
+;
 ?>
 
 <!DOCTYPE html>
@@ -11,9 +33,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/cpi_login/Assets/styles-contenido.css">
-    <link rel="stylesheet" type="text/css" href="/Assets/styles_warnings.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="../Assets/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../Assets/styles-contenido.css">
+    <link rel="stylesheet" type="text/css" href="../Assets/styles_warnings.css">
     
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -31,9 +54,9 @@
 
 <body>
     <!--Logo-->
-    <div class="container-fluid">
-        <h1 class="text-center py-3">SCOL</h1>
-        <p class="text-center">Sistema de Consulda Online Lux</p>
+    <div class="container-fluid head2">
+        <h1 class="text-center py-3 text-s">SCOL</h1>
+        <p class="text-center text-s space">Sistema de Consulda Online Lux<br></p>
     </div>
     <!--NavBar-->
     <div class="container-fluid ">
@@ -43,55 +66,44 @@
                 <ul class="nav nav-pills justify-content-center">
 
                     <?php if (isset($_GET["modulos"])) : ?>
-                        <?php if ($_GET["modulos"] == "inicio_admin") : ?>
+                        <?php if ($_GET["modulos"] == "inicio_user") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=inicio_admin">Inicio</a>
+                                <a class="nav-link active" href="../views/panel_usuario.php?modulos=inicio_user&id=<?php echo $existe['id'];?>&nm=<?php echo $_SESSION["validarSesionUserName"];?>">Inicio</a>
+
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=inicio_admin">Inicio</a>
+                                <a class="nav-link" href="../views/panel_usuario.php?modulos=inicio_user&id=<?php echo $existe['id'];?>&nm=<?php echo $_SESSION["validarSesionUserName"];?>">Inicio</a>
                             </li>
                         <?php endif ?>
-                        <?php if ($_GET["modulos"] == "registro_admin") : ?>
+                        <?php if ($_GET["modulos"] == "buscar_user") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=registro_admin">Registrar</a>
+                                <a class="nav-link active" href="../views/panel_usuario.php?modulos=buscar_user">Buscar</a>
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=registro_admin">Registrar</a>
-                            </li>
-                        <?php endif ?>
-                        <?php if ($_GET["modulos"] == "carga_admin") : ?>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=carga_admin">Subir</a>
-                            </li>
-                        <?php else : ?>
-                            <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=carga_admin">Subir</a>
+                                <a class="nav-link" href="../views/panel_usuario.php?modulos=buscar_user">Buscar</a>
                             </li>
                         <?php endif ?>
                         <?php if ($_GET["modulos"] == "salir_admin") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=salir_admin">Salir</a>
+                                <a class="nav-link active" href="../views/panel_usuario.php?modulos=salir_admin">Salir</a>
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=salir_admin">Salir</a>
+                                <a class="nav-link" href="../views/panel_usuario.php?modulos=salir_admin">Salir</a>
                             </li>
                         <?php endif ?>
 
                     <?php else : ?>
                         <li class="nav-item">
-                            <a class="nav-link active" href="../views/panel_admin.php?modulos=inicio_admin">Inicio</a>
+                            <a class="nav-link active" href="../views/panel_usuario.php?modulos=inicio_user&id=<?php echo $existe['id'];?>&nm=<?php echo $_SESSION["validarSesionUserName"];?>">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_admin.php?modulos=registro_admin">Registrar</a>
+                            <a class="nav-link" href="../views/panel_usuario.php?modulos=buscar_user">Buscar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_admin.php?modulos=carga_admin">Subir</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_admin.php?modulos=salir_admin">Salir</a>
+                            <a class="nav-link" href="../views/panel_usuario.php?modulos=salir_admin">Salir</a>
                         </li>
                     <?php endif ?>
                 </ul>
@@ -103,10 +115,12 @@
             <?php
 
             if (isset($_GET["modulos"])) {
-                if (($_GET["modulos"] == "carga_admin") ||
-                    ($_GET["modulos"] == "salir_admin") ||
-                    ($_GET["modulos"] == "registro_admin") ||
-                    ($_GET["modulos"] == "inicio_admin")
+                if (($_GET["modulos"] == "buscar_user") ||
+                    ($_GET["modulos"] == "buscar_user_patient") ||
+                    ($_GET["modulos"] == "buscar_user_reception") ||
+                    ($_GET["modulos"] == "buscar_user_deliver") ||
+                    ($_GET["modulos"] == "inicio_user") ||
+                    ($_GET["modulos"] == "salir_admin")
                 ) {
                     include "../views/modulos/" . $_GET["modulos"] . ".php";
                 }
@@ -115,17 +129,17 @@
                     die();
                 }
             } else {
-                include "../views/modulos/inicio_admin.php";
+                include "../views/modulos/inicio_user.php";
             }
             ?>
         </div>
     </div>
     <footer>
         <?php 
-        include "../controllers/ctr_footer.php";
-        DirsFooter::dirCSSFooterPA();
-        DirsFooter::dirFooterPA(); 
-        DirsFooter::dirCopyRight();
+            include "../controllers/ctr_footer.php";
+            DirsFooter::dirCSSFooterPA();
+            DirsFooter::dirFooterPA(); 
+            DirsFooter::dirCopyRight();
         ?>
     </footer>
 </body>

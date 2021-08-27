@@ -4,7 +4,7 @@ session_start();
 //     echo '<script>alert('.print_r($_SESSION).')</script>';
 // }
 if(isset($_SESSION["validarSesionAdmin"])){
-    if($_SESSION["validarSesionAdmin"]!='ok'){
+    if($_SESSION["validarSesionAdmin"]!='ADMIN'){
         echo '<script>window.location = "http://localhost/cpi_login/index_online.php"</script>';
         return;
     }

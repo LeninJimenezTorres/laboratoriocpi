@@ -35,8 +35,7 @@ class ControladorLogin{
                     if($respuesta['name']==$_POST["nombre"] && $respuesta['password']==$_POST["passwd"]){
                         // echo '<p>'.print_r($respuesta).'</p>';
                         echo '<div class="alert-success">Ingreso exitoso</div>';
-                        
-                        
+                           
                         if($respuesta['name'] == "admin_cpi")
                         {
                             //INICIO LA PRIVATIZACION COGIENDO LA VARIABLE DE SESSION EN EL INGRESO
@@ -46,8 +45,11 @@ class ControladorLogin{
                         }
                         else{
                             //include "/views/panel_usuario.php";
-                            $adm=new ControladorTypePanel();
-                            $adm->ctrAbrirPanelUser();
+                            $id=$respuesta['id'];
+                            echo 'Este es el id= ';print_r($id);
+                            ModelUserTypes::mdlUserCall($id,$respuesta['name']);
+                            //$adm=new ControladorTypePanel();
+                            //$adm->ctrAbrirPanelUser($respuesta['id']);
                         }
                     }     
                 }
