@@ -1,38 +1,61 @@
 <?php
-
-if (isset($_GET['id']) && isset($_GET['nm'])) {
-    if($_GET['id']== $_SESSION["validarSesionUser"] 
-        && $_GET['nm']==$_SESSION["validarSesionUserName"])
-    {
-        //echo $_GET['id'].'<br><br><br>';
-        //Consulta del nombre del id
-        $dr = ControladorFormulario::ctrConsultaDatos('usuarios', 'id', $_GET['id']);
-        //Consulta de todos los registros de resultados con el nombre del dr
-        $resultados = ControladorFormulario::ctrConsultaDatosEspecificosUser('resultados', 'dr', $dr['name']);
-        //echo 'Doctor: '; print_r($dr['name']);
-        //echo '<pre>';print_r($resultados);echo'</pre>';
-        $validacion = 'OK';
+    if ($_GET['idt'] && $_GET['name']){
+        //$existe = ControladorFormulario::ctrDatoExistente('usuarios','idt',$idt);//me devuelve el id
+        $dirIndexOnline='../index_online.php';
+        $dirPanelUser='../views/panel_usuario.php';
+        $dirPanelUserModuloSalir='../views/panel_usuario.php?modulos=salir_admin';
+        $idtad=ModeloFormularios::mdlUserDataSpecific('usuarios','name',$_GET['name']);
+    
+        $idt=$_GET['idt'];
+        $name=$_GET['name'];
+        $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+        //echo 'Consulta : '; print_r($consultaToken);
+        if ($consultaToken){
+            if($consultaToken['token']!=$idt)
+            {
+                //$validacion = 'WRONG';x`  
+                echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+                return;
+            }
+            if ($idtad['token']!=$idt){
+                //$validacion = 'WRONG';
+                echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+                return;
+            }
+            else if($idtad['token']==$idt){
+                $dr = ControladorFormulario::ctrConsultaDatos('usuarios', 'name', $_GET['name']);
+                //Consulta de todos los registros de resultados con el nombre del dr
+                //$resultados = ControladorFormulario::ctrConsultaDatosEspecificosUser('resultados', 'dr', $dr['name']);
+                //$validacion = 'OK';        
+            }
+        }
+        else{
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }  
+        
     }
     else{
-        $validacion = 'WRONG';
-    }
-}
+        echo '<script>window.location ='.$dirIndexOnline.'</script>';
+        return;
+    }    
+    //<?php if ($validacion == 'OK'):
+    //<?php endif
+    $resultados = ControladorFormulario::ctrConsultaDatosEspecificosUser('resultados', 'dr', $dr['name']);
+                
 ?>
 <form method="post">
     <div class="container p-5 bg-light">
-        <?php if ($validacion == 'OK'):?>
         <h4 class="h2-title">Historial del Dr.
             <?php echo $dr['name']; ?>
         </h4>
         <p>Puede descargar los informes de los resultados</p>
         <div class="input-group-prepend justify-content-center align-items-center p-4">
             <button type="submit" class="btn btn-primary d-flex p-1" name="search"><i class="fas fa-search p-1"></i> Buscar</button>
-            <input for="inputsm" type="text" class="form-control-plaintext p-1 text-dark" placeholder="      Ingrese el nombre del paciente" id="buscar" name="buscar">
-            
+            <input for="inputsm" type="text" class="form-control-plaintext p-1 text-dark" placeholder="      Ingrese el nombre del paciente" id="buscar" name="buscar"> 
         </div>
-        <?php ControladorFormulario::ctrlBusquedaResultPanel($dr['name']); ?>
-        <?php endif?>
     </div>
+    <?php ControladorFormulario::ctrlBusquedaResultPanel($dr['name'],$idt);?>
     <table class="table table-dark table-hover text-center">
         <thead>
             <tr>
@@ -56,14 +79,11 @@ if (isset($_GET['id']) && isset($_GET['nm'])) {
                         </td>
                     </tr>
                 <?php endforeach ?>
-                <?php
-                if (isset($value["result"]) && isset($value["dr"])) {
-                    ControladorFormulario::ctrDownload();
-                }
-                ?>
+               
             <?php endif ?>
         </tbody>
     </table>
 </form>
 <?php
+ControladorFormulario::ctrDownload($idt);
 echo '<script>if(window.history.replaceState){window.history.replaceState( null, null, window.location.href);}</script>';

@@ -3,14 +3,35 @@
 require_once "conexion_registros.php";
 
 class ModeloFormularios{
+       
+    //MODELO AGREGAR VALOR A DB SESION
+    static public function mdlAddSession($tabla, $value)
+    {
+        $stmt = ConexionRegistrosDB::conectar() -> prepare("INSERT INTO $tabla(sesion) VALUES (:sesion)");
+        $stmt->bindParam(":sesion", $value, PDO::PARAM_STR); 
+        if($stmt->execute()){
+            return "ok";
+        }
+        else{
+            print_r(ConexionRegistrosDB::conectar()->errorInfo());
+        }
+        $stmt -> die;
+        $stmt = null;
+    }
+
     //ESTE MODELO TRAE UN VALOR EN ESPECIFICO DE UNA COLUMNA EN ESPECIFICO
     static public function mdlSpecificValueQuery($tabla, $columnQuery, $columnValue ,$value){
         $stmt = ConexionRegistrosDB::conectar() -> prepare("SELECT $columnQuery FROM $tabla WHERE $columnValue =:$columnValue");
         $stmt->bindParam(":".$columnValue,$value, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetch(); 
-        $stmt -> die;
-        $stmt = null;
+        if($stmt->execute()){
+            return $stmt->fetch(); 
+            $stmt -> die;
+            $stmt = null;    
+        }
+        else{
+            return 'error';
+        }
+        
     }
 
     static public function mdlUserQueryExistent($tabla, $datos, $column, $valor){
@@ -50,13 +71,14 @@ class ModeloFormularios{
     }
 
     static public function mdlSignUpUser($tabla, $datos){
-        $stmt = ConexionRegistrosDB::conectar() -> prepare("INSERT INTO $tabla(name, specialty, home, password, email, phone) VALUES (:name,  :specialty, :home, :password, :email, :phone)");
+        $stmt = ConexionRegistrosDB::conectar() -> prepare("INSERT INTO $tabla(name, specialty, home, password, email, phone, token) VALUES (:name,  :specialty, :home, :password, :email, :phone, :token)");
         $stmt->bindParam(":name", $datos["name"], PDO::PARAM_STR);
         $stmt->bindParam(":specialty", $datos["specialty"], PDO::PARAM_STR);
         $stmt->bindParam(":home", $datos["home"], PDO::PARAM_STR);
         $stmt->bindParam(":password", $datos["password"], PDO::PARAM_STR);
         $stmt->bindParam(":email", $datos["email"], PDO::PARAM_STR);
         $stmt->bindParam(":phone", $datos["phone"], PDO::PARAM_STR);
+        $stmt->bindParam(":token", $datos["token"], PDO::PARAM_STR);
         
         if($stmt->execute()){
             return "ok";

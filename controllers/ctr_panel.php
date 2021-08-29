@@ -6,8 +6,8 @@ class ControladorTypePanel{
         exit();
         die();
     }
-    public function ctrAbrirPanelUser($id){
-        ModelUserTypes::mdlUserCall($id);
+    public function ctrAbrirPanelUser($id,$name){
+        ModelUserTypes::mdlUserCall($id,$name);
         exit();
         die();
     }

@@ -1,6 +1,34 @@
 <?php include '../views/modulos/bootstrap.php'; ?>
 <link rel="stylesheet" type="text/css" href="http://localhost/cpi_login/Assets/styles-messages.css">
 
+<?php
+$dirIndexOnline='../index_online.php';
+if ($_GET['idt']){
+  $idt=$_GET['idt'];
+  $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+  //echo 'Consulta : '; print_r($consultaToken);
+  //echo 'Variable idt: '.$_GET['idt'];
+  if ($consultaToken){
+      if($consultaToken['token']!=$idt)
+      {
+          echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+          return;
+      }
+      if ($idtad['token']!=$idt){
+          echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+          return;
+      }
+  }
+  else{
+      echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+      return;
+  }          
+}
+else{
+  echo '<script>window.location ='.$dirIndexOnline.'</script>';
+  return;
+}
+?>
 <form class="p-5 bg-light" method="post" id="registro">
   <div class="texto-simple">
     <p>Ingrese los datos del usuario</p>
@@ -54,48 +82,6 @@
     <p id="msgGeneral"></p>
     <p class="warnings" id="warnings"></p>
   </div>
-  <?php
-
-  //$nombre = new ControladorFormulario();
-  //$nombre -> ctrRegistro();
-  ControladorFormulario::ctrRegistroUsuarioValidado();
-  // if ($registro == "ok") 
-  // {
-  //   echo '<script>
-  //     if(window.history.replaceState)
-  //     {
-  //         window.history.replaceState( null, null, window.location.href);
-  //     }
-  //     </script>';
-
-  //     echo '<div class="alert-success">Registro exitoso</div>';
-  // }
-  // if ($registro != "ok") 
-  // {
-  //   echo '<script>
-  //     if(window.history.replaceState)
-  //     {
-  //         window.history.replaceState( null, null, window.location.href);
-  //     }
-  //     </script>';
-
-  //     if (!empty($registro)){
-  //     echo '<div class="alert-warning">Error de ingreso de datos</div>'; 
-  //       if (!empty($registro['name'])){
-  //         echo '<div class="alert-warning"> - '.$registro['name'].'</div>';
-  //       }
-  //       if (!empty($registro['specialty'])){
-  //         echo '<div class="alert-warning"> - '.$registro['specialty'].'</div>';
-  //       }
-  //       if (!empty($registro['home'])){
-  //         echo '<div class="alert-warning"> - '.$registro['home'].'</div>';
-  //       }
-  //       if (!empty($registro['password'])){
-  //         echo '<div class="alert-warning"> - '.$registro['password'].'</div>';
-  //       }
-
-  //   }
-  // }
-  ?>
+  <?php ControladorFormulario::ctrRegistroUsuarioValidado($idt);?>
 </form>
 <!-- <script type="text/javascript" src="http://localhost/cpi_login/Assets/script_registro.js"></script> -->

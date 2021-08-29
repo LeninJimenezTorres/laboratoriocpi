@@ -3,7 +3,7 @@
         alert("Welcome to the javaTpoint.com");  
     }
     function abrir(valor){
-        alert(valor);
+        //alert(valor);
         //window.open(enlace, "Diseño Web");
         window.open(valor, "Diseño Web");
     }  

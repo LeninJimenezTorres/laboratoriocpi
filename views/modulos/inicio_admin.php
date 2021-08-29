@@ -1,10 +1,33 @@
 <?php
-//CREO UN OBJETO QUE LLEVA TODOS LOS DATOS CONSULTADOS EN LA BASE DE DATOS POR MEDIO DE
-//UN CONTROLADOR INTERMEDIARIO QUE OCULTA EL NOMBRE DE LA DB Y LLAMA A LA VEZ AL
-//MODELO QUE CONSULTA DIRECTAMENTE CON LA DB, PERO ALMACENA EN EL CONTROLADOR LOS RESULTADOS DE LA CONSULTA
-//Y ASI NO SE EXPONE EL MODELO
+$dirIndexOnline='../index_online.php';
+if ($_GET['idt']){
+    $idt=$_GET['idt'];
+    $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+    //echo 'Consulta : '; print_r($consultaToken);
+    //echo 'Variable idt: '.$_GET['idt'];
+    if ($consultaToken){
+        if($consultaToken['token']!=$idt)
+        {
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
+        if ($idtad['token']!=$idt){
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
+    }
+    else{
+        echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+        return;
+    }          
+}
+else{
+    echo '<script>window.location ='.$dirIndexOnline.'</script>';
+    return;
+}
 $usuarios = ControladorFormulario::ctrSeleccionarRegistros();
 //echo '<pre>';print_r($usuarios);echo'</pre>';
+
 ?>
 <!-- <link rel="stylesheet" type="text/css" href="http://localhost/cpi_login/Assets/styles-contenido.css"> -->
     
@@ -13,7 +36,7 @@ $usuarios = ControladorFormulario::ctrSeleccionarRegistros();
         <button type="submit" class="btn btn-primary d-flex p-1" name="search" value="buscar"><i class="fas fa-search p-1"></i> Buscar</button>
         <input for="inputsm" type="text" class="form-control-plaintext p-1 text-dark" placeholder="      Ingrese el nombre del médico" id="buscar" name="buscar">   
     </div>
-    <?php ControladorFormulario::ctrlBusquedaUserPanel(); ?>
+    <?php ControladorFormulario::ctrlBusquedaUserPanel($idt); ?>
     <div class="container-fluid p-2 lola bg-light"> <!--bg-light-->
         <h4 class="h3-title text-center"><br><br>Lista de usuarios registrados</h4>
         <p><br>Click en 'Ver' para desplegar el historial de exámenes por médico:</p>
@@ -45,12 +68,12 @@ $usuarios = ControladorFormulario::ctrSeleccionarRegistros();
                             <td><?php echo $value["phone"] ?></td>
                             <td>
                                 <div class="row justify-content-center align-items-center form-group">
-                                    <a href="panel_admin.php?modulos=historial_admin&name=<?php echo $value["name"];?>" type="submit" id="ver" name="ver" class="btn btn-primary"><i class="fas fa-eye"></i></a>
+                                    <a href="panel_admin.php?modulos=historial_admin&name=<?php echo $value["name"];?>&idt=<?php echo $idt;?>" type="submit" id="ver" name="ver" class="btn btn-primary"><i class="fas fa-eye"></i></a>
                                 </div>
                             </td>
                             <td>
                                 <div class="row justify-content-center align-items-center form-group">
-                                    <a href="panel_admin.php?modulos=update_admin&id=<?php echo $value["id"];?>" type="submit" name="editar" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                    <a href="panel_admin.php?modulos=update_admin&id=<?php echo $value["id"];?>&idt=<?php echo $idt;?>" type="submit" name="editar" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                                 </div>
                                 <div class="row justify-content-center align-items-center form-group">
                                     <form action="" method="post">
@@ -67,7 +90,7 @@ $usuarios = ControladorFormulario::ctrSeleccionarRegistros();
 </form>
 <?php
     $rem = new ControladorFormulario();
-    $rem -> ctrEliminarUsuario();
+    $rem -> ctrEliminarUsuario($idt);
 
     //ControladorFormulario::ctrlBusquedaUserPanel();
     echo '<script>if(window.history.replaceState){window.history.replaceState( null, null, window.location.href);}</script>';

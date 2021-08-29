@@ -1,7 +1,4 @@
-<?php
-session_start();                                
-?>
-
+<?php require_once 'Models/modelo_formulario_admin.php'; ?>
 <script>
     function contacte(){
         alert("Contacte al administrador");
@@ -32,14 +29,6 @@ session_start();
                     <div class="container-header-1">
                         <p>Sistema de Consulda Online Lux</p>
                     </div>
-                    <!-- <div class="container-menu">
-                        <nav>
-                            <ul>
-                                <li><a href="https://laboratoriocpi.com/">INICIO</a></li>
-                                <li><a href="#">ADQUIRIR SISTEMA</a></li>
-                            </ul>
-                        </nav>
-                    </div> -->
                 </header>
                 <div class="detalles-sistema">
                     <ul id="lista-servicios">
@@ -80,7 +69,6 @@ session_start();
                             <div class="registrarse">
                                 <a href="#" onclick="contacte()">Registrarse</a>
                             </div>   
-                            
                             <?php
                                 $ingreso =  new ControladorLogin();
                                 $ingreso -> ctrLogin();

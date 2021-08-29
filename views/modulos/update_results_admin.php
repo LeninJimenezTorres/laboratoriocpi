@@ -1,5 +1,32 @@
 <?php
 //AQUI LLAMO A UN CONTROLADOR QUE CONSULTA LOS DATOS EN LA DB DEL ID DE LA VARIABLE GET
+$dirIndexOnline='../index_online.php';
+if ($_GET['idt']){
+  $idt=$_GET['idt'];
+  $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+  //echo 'Consulta : '; print_r($consultaToken);
+  //echo 'Variable idt: '.$_GET['idt'];
+  if ($consultaToken){
+      if($consultaToken['token']!=$idt)
+      {
+          echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+          return;
+      }
+      if ($idtad['token']!=$idt){
+          echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+          return;
+      }
+  }
+  else{
+      echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+      return;
+  }          
+}
+else{
+  echo '<script>window.location ='.$dirIndexOnline.'</script>';
+  return;
+}
+
 if(isset($_GET['code'])){
     $tabla = 'resultados';
     $column = 'code';
@@ -55,7 +82,7 @@ if(isset($_GET['code'])){
   </div>  
   <?php
         include 'bootstrap.php';
-        ControladorFormulario::ctrUpdateResult();
+        ControladorFormulario::ctrUpdateResult($idt);
         
   ?>
 </form>

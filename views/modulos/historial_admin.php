@@ -1,5 +1,33 @@
 <?php
 //$resultados = ControladorFormulario::ctrShowResults($_POST['ver']);
+$dirIndexOnline='../index_online.php';
+if ($_GET['idt']){
+    $idt=$_GET['idt'];
+    $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+    //echo 'Consulta : '; print_r($consultaToken);
+    //echo 'Variable idt: '.$_GET['idt'];
+    if ($consultaToken){
+        if($consultaToken['token']!=$idt)
+        {
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
+        if ($idtad['token']!=$idt){
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
+    }
+    else{
+        echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+        return;
+    }          
+}
+else{
+    echo '<script>window.location ='.$dirIndexOnline.'</script>';
+    return;
+}
+
+
 if (isset($_GET["name"])){
     $val=$_GET["name"];
     //echo $val;
@@ -50,12 +78,14 @@ else{
                         </td>
                         <td>
                             <div class="row justify-content-center align-items-center form-group">
-                                <a href="panel_admin.php?modulos=update_results_admin&code=<?php echo $value["code"];?>" type="submit" name="update_result" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                <a href="panel_admin.php?modulos=update_results_admin&code=<?php echo $value["code"];?>&idt=<?php echo $idt;?>" type="submit" name="update_result" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                             </div>
                             <div class="row justify-content-center align-items-center form-group">
                                 <button type="submit" name="eliminar" value="<?php echo $value["code"] ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                             </div>
                         </td>
+                        <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
+                            
                     </tr>
                 <?php endforeach ?>
                 <?php

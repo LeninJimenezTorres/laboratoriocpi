@@ -1,4 +1,31 @@
 <?php
+$dirIndexOnline='../index_online.php';
+if ($_GET['idt']){
+    $idt=$_GET['idt'];
+    $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+    //echo 'Consulta : '; print_r($consultaToken);
+    //echo 'Variable idt: '.$_GET['idt'];
+    if ($consultaToken){
+        if($consultaToken['token']!=$idt)
+        {
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
+        if ($idtad['token']!=$idt){
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
+    }
+    else{
+        echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+        return;
+    }          
+}
+else{
+    echo '<script>window.location ='.$dirIndexOnline.'</script>';
+    return;
+}
+
     $autolist = ControladorFormulario::Autocomplete();
     $otra = 'sdfsdfsdfesd';
     $var="";
@@ -77,4 +104,4 @@
     });
 </script>    
 <?php
-ControladorFormulario::ctrIngresoDatosResultados();
+ControladorFormulario::ctrIngresoDatosResultados($idt);

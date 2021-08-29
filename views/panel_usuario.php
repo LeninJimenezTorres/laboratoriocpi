@@ -1,28 +1,41 @@
 <?php
     require_once "../controllers/ctr_formularios.php";
     require_once "../Models/modelo_formulario_admin.php";
-    session_start();
-    // if(isset($_SESSION)){
-    //     echo '<script>alert('.print_r($_SESSION).')</script>';
-    // }
-    if(isset($_SESSION["validarSesionUser"])){
-        //CONSULTO SI EL ID ESTA EN LA BASE DE DATOS DE LOS DR
-        //echo 'Variable sesion ID en panel: '.$_SESSION["validarSesionUser"].'<br><br>';
-        //echo 'Variable sesion Name en panel: '.$_SESSION["validarSesionUserName"].'<br><br>';
-        
-        $existe = ControladorFormulario::ctrDatoExistente('usuarios','id',$_SESSION["validarSesionUser"]);//me devuelve el id
-        //echo 'Existe el usuario: ';
-        //print_r($existe);
-        if($_SESSION["validarSesionUser"]!=$existe['id'] || $_SESSION['validarSesionUserName']!=$existe['name']){
-            echo '<script>window.location = "http://localhost/cpi_login/index_online.php"</script>';
-            return;
+    
+    //echo 'Existe el usuario: ';
+    //print_r($existe);
+    if ($_GET['idt'] && $_GET['name']){
+        //$existe = ControladorFormulario::ctrDatoExistente('usuarios','idt',$idt);//me devuelve el id
+        $dirIndexOnline='../index_online.php';
+        $dirPanelUser='../views/panel_usuario.php';
+        $dirPanelUserModuloSalir='../views/panel_usuario.php?modulos=salir_admin';
+        $idtad=ModeloFormularios::mdlUserDataSpecific('usuarios','name',$_GET['name']);
+    
+        $idt=$_GET['idt'];
+        $name=$_GET['name'];
+        $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+        //echo 'Consulta : '; print_r($consultaToken);
+        if ($consultaToken){
+            if($consultaToken['token']!=$idt)
+            {
+                echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+                return;
+            }
+            if ($idtad['token']!=$idt){
+                echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+                return;
+            }
         }
+        else{
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }          
     }
     else{
-        echo '<script>window.location = "http://localhost/cpi_login/index_online.php"</script>';
+        echo '<script>window.location ='.$dirIndexOnline.'</script>';
         return;
-    }
-;
+    }      
+    
 ?>
 
 <!DOCTYPE html>
@@ -68,42 +81,41 @@
                     <?php if (isset($_GET["modulos"])) : ?>
                         <?php if ($_GET["modulos"] == "inicio_user") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_usuario.php?modulos=inicio_user&id=<?php echo $existe['id'];?>&nm=<?php echo $_SESSION["validarSesionUserName"];?>">Inicio</a>
-
+                                <a class="nav-link active" href="<?php echo $dirPanelUser.'?modulos=inicio_user&name='.$name.'&idt='.$idt;?>">Inicio</a>
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_usuario.php?modulos=inicio_user&id=<?php echo $existe['id'];?>&nm=<?php echo $_SESSION["validarSesionUserName"];?>">Inicio</a>
+                                <a class="nav-link" href="<?php echo $dirPanelUser.'?modulos=inicio_user&name='.$name.'&idt='.$idt;?>">Inicio</a>
                             </li>
                         <?php endif ?>
                         <?php if ($_GET["modulos"] == "buscar_user") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_usuario.php?modulos=buscar_user">Buscar</a>
+                                <a class="nav-link active" href="<?php echo $dirPanelUser.'?modulos=buscar_user&name='.$name.'&idt='.$idt;?>">Buscar</a>
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_usuario.php?modulos=buscar_user">Buscar</a>
+                                <a class="nav-link" href="<?php echo $dirPanelUser.'?modulos=buscar_user&name='.$name.'&idt='.$idt;?>">Buscar</a>
                             </li>
                         <?php endif ?>
                         <?php if ($_GET["modulos"] == "salir_admin") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_usuario.php?modulos=salir_admin">Salir</a>
+                                <a class="nav-link active" href="<?php echo $dirPanelUser.'?modulos=salir_admin&name='.$name.'&idt='.$idt;?>">Salir</a>
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_usuario.php?modulos=salir_admin">Salir</a>
+                                <a class="nav-link" href="<?php echo $dirPanelUser.'?modulos=salir_admin&name='.$name.'&idt='.$idt;?>">Salir</a>
                             </li>
                         <?php endif ?>
 
                     <?php else : ?>
                         <li class="nav-item">
-                            <a class="nav-link active" href="../views/panel_usuario.php?modulos=inicio_user&id=<?php echo $existe['id'];?>&nm=<?php echo $_SESSION["validarSesionUserName"];?>">Inicio</a>
+                            <a class="nav-link active" href="<?php echo $dirPanelUser.'?modulos=inicio_user&name='.$name.'&idt='.$idt;?>">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_usuario.php?modulos=buscar_user">Buscar</a>
+                            <a class="nav-link" href="<?php echo $dirPanelUser.'?modulos=buscar_user&name='.$name.'&idt='.$idt;?>">Buscar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_usuario.php?modulos=salir_admin">Salir</a>
+                            <a class="nav-link" href="<?php echo $dirPanelUser.'?modulos=salir_admin&name='.$name.'&idt='.$idt;?>">Salir</a>
                         </li>
                     <?php endif ?>
                 </ul>
@@ -120,8 +132,7 @@
                     ($_GET["modulos"] == "buscar_user_reception") ||
                     ($_GET["modulos"] == "buscar_user_deliver") ||
                     ($_GET["modulos"] == "inicio_user") ||
-                    ($_GET["modulos"] == "salir_admin")
-                ) {
+                    ($_GET["modulos"] == "salir_admin") ) {
                     include "../views/modulos/" . $_GET["modulos"] . ".php";
                 }
                 else{

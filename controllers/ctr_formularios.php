@@ -12,14 +12,14 @@ class ControladorFormulario{
     }
 
     //BUSQUEDA POR FILTRO USER
-    static public function ctrBusquedaUserReception($TipoFecha){
+    static public function ctrBusquedaUserReception($TipoFecha, $name){
         if (isset($_POST['search'])){
             //PRIMERO VALIDO LA ENTRADA
             if (preg_match('/^[0123456789\\/]/',$_POST["fecha"]) && !empty($_POST['fecha']))
                 { 
                     
                     //REALIZO LA CONSULTA
-                    $consulta = ModeloFormularios::mdlResultQueryDouble('resultados',$TipoFecha, $_POST['fecha'], 'dr', $_SESSION["validarSesionUserName"]); 
+                    $consulta = ModeloFormularios::mdlResultQueryDouble('resultados',$TipoFecha, $_POST['fecha'], 'dr', $name); 
                     if (!empty($consulta))
                     {   
                         echo '<div class="alert-success text-center">Búsqueda exitosa<br></div>'; 
@@ -39,9 +39,9 @@ class ControladorFormulario{
     }
 
     //BUSQUEDA POR FILTRO USER
-    static public function ctrBusquedaUserPatient(){
+    static public function ctrBusquedaUserPatient($name){
         if (isset($_POST['search'])){
-            $consulta = ModeloFormularios::mdlResultQueryDouble('resultados','patient', $_POST['buscar'], 'dr', $_SESSION["validarSesionUserName"]); 
+            $consulta = ModeloFormularios::mdlResultQueryDouble('resultados','patient', $_POST['buscar'], 'dr', $name); 
             if (!empty($consulta))
             {   
                 include '../views/modulos/show_query_user.php';
@@ -98,13 +98,14 @@ class ControladorFormulario{
     }
 
     //BUSQUEDA DE USUARIO INICIO
-    static public function ctrlBusquedaUserPanel(){
+    static public function ctrlBusquedaUserPanel($idt){
         if (isset($_POST['search'])){
             if (!empty($_POST['buscar'])){
                 $consulta = ModeloFormularios::mdlUserDataSpecific('usuarios','name', $_POST['buscar']); 
                 if (!empty($consulta))
                 {
-                    include '../Views/modulos/buscarinicio_admin.php';
+                    //echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=buscarinicio_admin&idt='.$idt.'";},10)</script>';
+                    include '../views/modulos/buscarInicio_admin.php';
                 }
                 else{        
                     echo '<div class="alert-warning text-center">El usuario no existe<br></div>'; 
@@ -114,14 +115,15 @@ class ControladorFormulario{
     }
 
         //BUSQUEDA DE USUARIO INICIO
-        static public function ctrlBusquedaResultPanel($doc){
+        static public function ctrlBusquedaResultPanel($doc,$idt){
             if (isset($_POST['search'])){
                 if (!empty($_POST['buscar'])){
                     $consulta = ModeloFormularios::mdlResultQueryDouble('resultados','patient', $_POST['buscar'], 'dr', $doc); 
                     //print_r($consulta);
                     if (!empty($consulta))
                     {
-                        include '../Views/modulos/buscarinicio_user.php';
+                        //echo '<script> setTimeout(function(){window.location = "../views/modulos/buscarInicio_user.php&name='.$doc.'&idt='.$idt.'";},3000)</script>';
+                        include '../views/modulos/buscarInicio_user.php';
                     }
                     else{        
                         echo '<div class="alert-warning text-center">El usuario no existe<br></div>'; 
@@ -132,7 +134,7 @@ class ControladorFormulario{
     
 
     //ESTE CTRL REGISTRA USUARIOS VALIDANDO LOS FORMULARIOS
-    static public function ctrRegistroUsuarioValidado(){
+    static public function ctrRegistroUsuarioValidado($idt){
         if(isset($_POST["submit"]))
         {
             if (preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$/',$_POST["nombre"])
@@ -148,7 +150,8 @@ class ControladorFormulario{
                     "password" => $_POST["pass"],
                     "email" => $_POST["email"],
                     "phone" => $_POST["telf"]);  
-                    
+                
+                array_push($datos,$datos["token"] = (md5($_POST['nombre'].'+'.$_POST['pass'])));
                 if (strlen($datos['name'])<7 || strlen($datos['specialty'])<4 ||
                 strlen($datos["home"])<7 || strlen($datos["password"])<7 )
                 {
@@ -189,7 +192,7 @@ class ControladorFormulario{
                                 window.history.replaceState( null, null, window.location.href);
                             }</script>';
                         echo '<div class="alert-success text-center">Registro exitoso</div>';
-                        echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin";},3000)</script>';
+                        echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin&idt='.$idt.'";},3000)</script>';
                     }
                     if (!empty($respuesta['name'])){
                         echo '<div class="alert-danger text-center">El usuario si existe, ingrese otro nombre diferente a: <br></div>'; 
@@ -204,7 +207,7 @@ class ControladorFormulario{
         }
     }
     //ESTA INGRESA LOS DATOS DE LOS RESULTADOS EN LA DB
-    static public function ctrIngresoDatosResultados(){
+    static public function ctrIngresoDatosResultados($idt){
         if(isset($_POST["upload"]))
         {
             $tabla = "resultados"; //el mismo nombre que la tabla en MyphpAdmin
@@ -242,7 +245,12 @@ class ControladorFormulario{
                         $cadenaError = $cadenaError.$errorDatos[$err]."<br>";
                     }
                 }
-                if (!empty($cadenaError)){echo '<p class="alert-warning text-center">'.$cadenaError.'</p>';}
+                if (!empty($cadenaError)){
+                    echo '<p class="alert-warning text-center">'.$cadenaError.'</p>';
+                    echo '<script>if(window.history.replaceState){
+                        window.history.replaceState( null, null, window.location.href);
+                        setTimeout(function(){location.reload()},4000);}</script>';
+                }
                 
             }
             if (strlen($datos['dr'])>=7 && strlen($datos['patient'])>=7 &&
@@ -276,7 +284,7 @@ class ControladorFormulario{
                             //CREACION DE DIRECTORIO
                             if (empty($dirConsulta[0])){
                                 echo '<div class="alert-success text-center">Creando directorio para el dr. '.$datos['dr'].'</div>';
-                                mkdir($newDir,0644);  
+                                mkdir($newDir,0777,true);  
                             }
                             else{
                                 echo '<div class="alert-success text-center">Directorio existente</div>';
@@ -302,7 +310,7 @@ class ControladorFormulario{
                                         window.history.replaceState( null, null, window.location.href);
                                     }</script>';
                                 echo '<div class="alert-success text-center">Registro exitoso</div>';
-                                echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin";},3000)</script>';
+                                echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin&idt='.$idt.'";},3000)</script>';
                             
                             }
                             else{
@@ -432,7 +440,7 @@ class ControladorFormulario{
     }
 
     //ESTA CLASE CTRL EDITAR LA INFORMACION DEL USUARIO
-    static public function ctrUpdateResult()
+    static public function ctrUpdateResult($idt)
     {
         if (isset($_POST['actualizar_result']))
         {
@@ -596,9 +604,9 @@ class ControladorFormulario{
                 echo '<script>if(window.history.replaceState){
                     window.history.replaceState( null, null, window.location.href);
                     setTimeout(function(){location.reload()},1000);}</script>';//setTimeout(function(){location.reload()},1000)
-                $dir = 'panel_admin.php?modulos=historial_admin&name='.$datosAnteriores['dr'];
+                $dir = 'panel_admin.php?modulos=historial_admin&name='.$datosAnteriores['dr'].'&idt='.$idt;
                 //echo $dir;
-                echo '<script> window.open("'.$dir.'") </script>';
+                echo '<script> window.open("'.$dir.'") </script>';//_________________
             }
             else {
                 echo '<script>if(window.history.replaceState){
@@ -618,7 +626,7 @@ class ControladorFormulario{
     }
 
     //ESTA CLASE CTRL EDITAR LA INFORMACION DEL USUARIO
-    public function ctrUpdate()
+    public function ctrUpdate($idt)
     {
         if (isset($_POST['actualizar'])){
             $tabla = "usuarios"; //el mismo nombre que la tabla en MyphpAdmin
@@ -643,7 +651,7 @@ class ControladorFormulario{
                     
                 if (($respuesta =='ok') ){
                     echo '<div class="alert-success">Actualización de datos exitosa</div>';
-                    echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin";},3000)</script>';
+                    echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin&idt='.$idt.'";},3000)</script>';
                 }
                 else{
                     echo '<div class="alert-danger">Error en la actualización de datos - problemas con el servidor</div>';
@@ -657,14 +665,14 @@ class ControladorFormulario{
     }
 
     //ESTA CLASE CTRL LLAMA AL MODELO PARA ELIMINAR UN USUARIO
-    static public function ctrEliminarUsuario(){
+    static public function ctrEliminarUsuario($idt){
         $tabla= "usuarios";
         if(isset($_POST["eliminar"]))
         {
             $resultado = ModeloFormularios::mdlEliminarRegistro($tabla,'id', $_POST["eliminar"]); 
             if ($resultado=="ok"){
                 echo '<script>alert("Usuario eliminado")</script>';
-                echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin";},1000)</script>';
+                echo '<script> setTimeout(function(){window.location = "../views/panel_admin.php?modulos=inicio_admin&idt='.$idt.'";},1000)</script>';
             }
         }
     }

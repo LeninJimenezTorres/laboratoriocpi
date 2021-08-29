@@ -1,19 +1,38 @@
 <?php
-session_start();
-// if(isset($_SESSION)){
-//     echo '<script>alert('.print_r($_SESSION).')</script>';
-// }
-if(isset($_SESSION["validarSesionAdmin"])){
-    if($_SESSION["validarSesionAdmin"]!='ADMIN'){
-        echo '<script>window.location = "http://localhost/cpi_login/index_online.php"</script>';
-        return;
+require_once '../Models/modelo_formulario_admin.php';
+
+//TOMO EL TOKEN DE LA VARIABLE GET
+$dirPanelAdmin='../views/panel_admin.php';
+$dirPanelAdminModuloSalir='../views/panel_admin.php?modulos=salir_admin';
+$dirIndexOnline='../index_online.php';
+$idtad=ModeloFormularios::mdlUserDataSpecific('usuarios','id','1');
+//print_r($idtad);
+//echo '<br><br>';
+//echo 'Token admin: '; print_r($idtad['token']);
+if ($_GET['idt']){
+    $idt=$_GET['idt'];
+    $consultaToken=ModeloFormularios::mdlSpecificValueQuery('usuarios','token','token',$idt);
+    //echo 'Consulta : '; print_r($consultaToken);
+    if ($consultaToken){
+        if($consultaToken['token']!=$idt)
+        {
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
+        if ($idtad['token']!=$idt){
+            echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+            return;
+        }
     }
+    else{
+        echo '<script>window.location ="'.$dirIndexOnline.'"</script>';
+        return;
+    }          
 }
 else{
-    echo '<script>window.location = "http://localhost/cpi_login/index_online.php"</script>';
+    echo '<script>window.location ='.$dirIndexOnline.'</script>';
     return;
-}
-    
+}      
     require_once "../controllers/ctr_formularios.php";
     require_once "../Models/modelo_formulario_admin.php";
 
@@ -67,63 +86,78 @@ else{
                     <?php if (isset($_GET["modulos"])) : ?>
                         <?php if ($_GET["modulos"] == "inicio_admin") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=inicio_admin">Inicio</a>
+                                <a class="nav-link active" href="<?php echo $dirPanelAdmin.'?modulos=inicio_admin&idt='.$idt;?>">Inicio</a>
+                                <!-- Paso la variable por metodo get y post -->
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=inicio_admin">Inicio</a>
+                                <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=inicio_admin&idt='.$idt;?>">Inicio</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php endif ?>
                         <?php if ($_GET["modulos"] == "registro_admin") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=registro_admin">Registrar</a>
+                                <a class="nav-link active" href="<?php echo $dirPanelAdmin.'?modulos=registro_admin&idt='.$idt;?>">Registrar</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=registro_admin">Registrar</a>
+                                <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=registro_admin&idt='.$idt;?>">Registrar</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php endif ?>
                         <?php if ($_GET["modulos"] == "carga_admin") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=carga_admin">Subir</a>
+                                <a class="nav-link active" href="<?php echo $dirPanelAdmin.'?modulos=carga_admin&idt='.$idt;?>">Subir</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=carga_admin">Subir</a>
+                                <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=carga_admin&idt='.$idt;?>">Subir</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">   
                             </li>
                         <?php endif ?>
                         <?php if ($_GET["modulos"] == "buscar_admin") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=buscar_admin">Buscar</a>
+                                <a class="nav-link active" href="<?php echo $dirPanelAdmin.'?modulos=buscar_admin&idt='.$idt;?>">Buscar</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=buscar_admin">Buscar</a>
+                                <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=buscar_admin&idt='.$idt;?>">Buscar</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php endif ?>
                         <?php if ($_GET["modulos"] == "salir_admin") : ?>
                             <li class="nav-item">
-                                <a class="nav-link active" href="../views/panel_admin.php?modulos=salir_admin">Salir</a>
+                                <a class="nav-link active" href= "<?php echo $dirPanelAdmin.'?modulos=salir_admin&idt='.$idt;?>">Salir</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php else : ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="../views/panel_admin.php?modulos=salir_admin">Salir</a>
+                                <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=salir_admin&idt='.$idt;?>">Salir</a>
+                                <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                             </li>
                         <?php endif ?>
 
                     <?php else : ?>
                         <li class="nav-item">
-                            <a class="nav-link active" href="../views/panel_admin.php?modulos=inicio_admin">Inicio</a>
+                            <a class="nav-link active" href="<?php echo $dirPanelAdmin.'?modulos=inicio_admin&idt='.$idt;?>">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_admin.php?modulos=registro_admin">Registrar</a>
+                            <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=registro_admin&idt='.$idt;?>">Registrar</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_admin.php?modulos=carga_admin">Subir</a>
+                            <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=carga_admin&idt='.$idt;?>">Subir</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="../views/panel_admin.php?modulos=salir_admin">Salir</a>
+                            <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=buscar_admin&idt='.$idt;?>">Buscar</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php echo $dirPanelAdmin.'?modulos=salir_admin&idt='.$idt;?>">Salir</a>
+                        </li>
+                        <input type="hidden" name="idt" id="code" value="<?php echo $idt; ?>">
                     <?php endif ?>
                 </ul>
             </nav>
@@ -141,6 +175,7 @@ else{
                     ($_GET["modulos"] == "historial_admin") ||
                     ($_GET["modulos"] == "update_results_admin") ||
                     ($_GET["modulos"] == "buscar_admin") ||
+                    //($_GET["modulos"] == "buscarInicio_admin") ||
                     ($_GET["modulos"] == "inicio_admin")
                 ) {
                     include "../views/modulos/" . $_GET["modulos"] . ".php";
