@@ -48,5 +48,10 @@ In the next page allows upload the file of the result exam. It form includes doc
 
 ![](Galeria/Screenshot14.png)
 
+In the next paage you can search information of each patien or all exam uploades by a specific doctor.
+
+![](Galeria/Screenshot15.png)
+![](Galeria/Screenshot16.png)
+
 
 
