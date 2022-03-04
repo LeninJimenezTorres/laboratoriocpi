@@ -4,7 +4,7 @@ This is a web app for a clinic laboratory with the domain: www.laboratoriocpi.co
 The development is made up by:
   - Frontend: Wordpress and HTML-CSS-JS personalized programming
   - Backend: PHP with Laravel
-  - IT structure: AWS instance server for the development cap and traditional hosting for the production final cap
+  - IT structure: AWS instance server for the development cap and traditional hosting for the production final cap. It incorpores relational databases with MySQL
 
 The main page/screen is shown in the below picture
 ![](Galeria/Screenshot1.png)
@@ -25,9 +25,28 @@ The third main page includes location info, attention schedule and a personal qu
 ![](Galeria/Screenshot7.png)
 
 The "Servicios" function option in the main page includes all the clinic exam areas offered by the laboratory
+
 ![](Galeria/Screenshot8.png)
 ![](Galeria/Screenshot9.png)
 
 
 
-The CRUD system is similar for both "Resultados" and "Calidad". 
+The CRUD system is similar for both "Resultados" and "Calidad". The firt screen shown is the authentication api.
+
+![](Galeria/Screenshot10.png)
+
+The main crud page shows the abstract of each doctor users registered.
+
+![](Galeria/Screenshot11.png)
+![](Galeria/Screenshot12.png)
+
+The next page shows the user register api for the admin who can do it. This form validate each data for both frontend and backend preventing possible injections
+
+![](Galeria/Screenshot13.png)
+
+In the next page allows upload the file of the result exam. It form includes doctor info and patient info.
+
+![](Galeria/Screenshot14.png)
+
+
+
