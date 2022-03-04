@@ -1,7 +1,12 @@
 # laboratoriocpi
 
 This is a web app for a clinic laboratory with the domain: www.laboratoriocpi.com
+The development is made up by:
+  - Frontend: Wordpress and HTML-CSS-JS personalized programming
+  - Backend: PHP with Laravel
+  - IT structure: AWS instance server for the development cap and traditional hosting for the production final cap
 
+The main page/screen is shown in the below picture
 ![](Galeria/Screenshot1.png)
 
 
@@ -19,3 +24,10 @@ The third main page includes location info, attention schedule and a personal qu
 ![](Galeria/Screenshot6.png)
 ![](Galeria/Screenshot7.png)
 
+The "Servicios" function option in the main page includes all the clinic exam areas offered by the laboratory
+![](Galeria/Screenshot8.png)
+![](Galeria/Screenshot9.png)
+
+
+
+The CRUD system is similar for both "Resultados" and "Calidad". 
