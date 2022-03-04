@@ -1,3 +1,4 @@
 # laboratoriocpi
 
-![](Galeria/Screenshot 1.png)
+This is the main screen, wich contains video slider content.
+![](Galery/Screenshot 1.png)
