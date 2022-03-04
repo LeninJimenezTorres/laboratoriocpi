@@ -4,7 +4,7 @@ This is a web app for a clinic laboratory with the domain: www.laboratoriocpi.co
 The development is made up by:
   - Frontend: Wordpress and HTML-CSS-JS personalized programming
   - Backend: PHP with Laravel
-  - IT structure: AWS instance server for the development cap and traditional hosting for the production final cap. It incorpores relational databases with MySQL
+  - IT structure: AWS instance server for the development cap and traditional hosting for the production final cap. It incorporates relational databases with MySQL
 
 The main page/screen is shown in the below picture
 ![](Galeria/Screenshot1.png)
