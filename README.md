@@ -1,3 +1,3 @@
 # laboratoriocpi
 
-![](/Galeria/Screenshot 1.png)
+![](Galeria/Screenshot 1.png)
