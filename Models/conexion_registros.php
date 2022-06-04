@@ -5,9 +5,9 @@ class ConexionRegistrosDB{
         // PDO (servidor, db, user, contraseña)
         try{
             $link = new PDO("mysql:host=localhost;
-            dbname=scol",
-            "root",
-            "");
+            dbname=dbname",
+            "username",
+            "password");
             
             $link->exec("set names utf8");
             return $link;
