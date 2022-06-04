@@ -20,7 +20,7 @@ require_once 'ctr_panel.php';
 class ControladorLogin{
     public function ctrLogin()
     {
-        $userdb='admin_cpi';
+        $userdb='user_admin';
         echo '<p></p>';
         if(isset($_POST["ingreso"]))
         {
